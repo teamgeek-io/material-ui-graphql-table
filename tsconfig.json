@@ -9,8 +9,9 @@
     "declaration": true,
     "moduleResolution": "node",
     "lib": ["DOM", "ES2015", "ES2017", "ES2018"],
-    "allowJs": false,
-    "noEmit": false,
+    "allowJs": true,
+    "noEmit": true,
+    "checkJs": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
