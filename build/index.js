@@ -24,6 +24,11 @@ var MuiButton = _interopDefault(require('@material-ui/core/Button'));
 var styles$1 = require('@material-ui/styles');
 var FormControlLabel = _interopDefault(require('@material-ui/core/FormControlLabel'));
 var Switch = _interopDefault(require('@material-ui/core/Switch'));
+var formik = require('formik');
+var MuiDialogTitle = _interopDefault(require('@material-ui/core/DialogTitle'));
+var Typography = _interopDefault(require('@material-ui/core/Typography'));
+var CloseIcon = _interopDefault(require('@material-ui/icons/Close'));
+var MuiDialogActions = _interopDefault(require('@material-ui/core/DialogActions'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -24616,8 +24621,50 @@ var SwitchField = function (_a) {
     return (React__default.createElement(FormControlLabel, { control: React__default.createElement(Switch, __assign({ checked: !!field.value, onChange: handleChange, value: field.name }, props)), label: label }));
 };
 
+var useStyles$5 = styles.makeStyles({
+    form: {
+        width: "100%",
+    },
+});
+var Form = function (_a) {
+    var className = _a.className, props = __rest(_a, ["className"]);
+    var classes = useStyles$5();
+    return React__default.createElement(formik.Form, __assign({ className: clsx(classes.form, className) }, props));
+};
+
+var useStyles$6 = makeStyles(function (theme) { return ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: "absolute",
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+}); });
+var DialogTitle = function (_a) {
+    var children = _a.children, onClose = _a.onClose;
+    var classes = useStyles$6();
+    return (React__default.createElement(MuiDialogTitle, { disableTypography: true, className: classes.root },
+        React__default.createElement(Typography, { variant: "h6" }, children),
+        onClose ? (React__default.createElement(IconButton, { "aria-label": "Close", className: classes.closeButton, onClick: onClose },
+            React__default.createElement(CloseIcon, null))) : null));
+};
+
+var DialogActions = styles.withStyles(function (theme) { return ({
+    root: {
+        minHeight: theme.spacing(8),
+    },
+}); })(MuiDialogActions);
+
 exports.AutocompleteField = AutocompleteField;
+exports.Button = Button;
+exports.DialogActions = DialogActions;
+exports.DialogTitle = DialogTitle;
 exports.EmailField = EmailField;
+exports.Form = Form;
 exports.PasswordField = PasswordField;
 exports.RichTextField = RichTextField;
 exports.SelectField = SelectField;

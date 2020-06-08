@@ -10,13 +10,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
-import { makeStyles as makeStyles$1 } from '@material-ui/core/styles';
+import { makeStyles as makeStyles$1, withStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Select from '@material-ui/core/Select';
 import MuiButton from '@material-ui/core/Button';
 import { makeStyles as makeStyles$2 } from '@material-ui/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { Form as Form$1 } from 'formik';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiDialogActions from '@material-ui/core/DialogActions';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -24609,5 +24614,43 @@ var SwitchField = function (_a) {
     return (React.createElement(FormControlLabel, { control: React.createElement(Switch, __assign({ checked: !!field.value, onChange: handleChange, value: field.name }, props)), label: label }));
 };
 
-export { AutocompleteField, EmailField, PasswordField, RichTextField, SelectField, SubmitButton, SwitchField, TextField };
+var useStyles$5 = makeStyles$1({
+    form: {
+        width: "100%",
+    },
+});
+var Form = function (_a) {
+    var className = _a.className, props = __rest(_a, ["className"]);
+    var classes = useStyles$5();
+    return React.createElement(Form$1, __assign({ className: clsx(classes.form, className) }, props));
+};
+
+var useStyles$6 = makeStyles(function (theme) { return ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: "absolute",
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+}); });
+var DialogTitle = function (_a) {
+    var children = _a.children, onClose = _a.onClose;
+    var classes = useStyles$6();
+    return (React.createElement(MuiDialogTitle, { disableTypography: true, className: classes.root },
+        React.createElement(Typography, { variant: "h6" }, children),
+        onClose ? (React.createElement(IconButton, { "aria-label": "Close", className: classes.closeButton, onClick: onClose },
+            React.createElement(CloseIcon, null))) : null));
+};
+
+var DialogActions = withStyles(function (theme) { return ({
+    root: {
+        minHeight: theme.spacing(8),
+    },
+}); })(MuiDialogActions);
+
+export { AutocompleteField, Button, DialogActions, DialogTitle, EmailField, Form, PasswordField, RichTextField, SelectField, SubmitButton, SwitchField, TextField };
 //# sourceMappingURL=index.es.js.map
