@@ -1,6 +1,6 @@
 {
   "name": "material-ui-graphql-table",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GraphQL powered table to drive CRUD operations",
   "author": "Teamgeek",
   "license": "MIT",
@@ -38,7 +38,10 @@
     "rollup-plugin-peer-deps-external": "^2.2.2",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^26.1.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "@apollo/react-hooks": "^3.1.5",
+    "apollo-boost": "^0.4.9",
+    "react-apollo": "^3.1.5"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.9.14",
@@ -47,7 +50,10 @@
     "formik": "^2.1.4",
     "formik-material-ui-elements": "^1.0.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "@apollo/react-hooks": "^3.1.5",
+    "apollo-boost": "^0.4.9",
+    "react-apollo": "^3.1.5"
   },
   "scripts": {
     "build": "rollup -c",
@@ -77,17 +83,14 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.5",
     "@types/humps": "^2.0.0",
     "@types/lodash": "^4.14.155",
     "@types/pluralize": "^0.0.29",
     "@types/yup": "^0.29.2",
-    "apollo-boost": "^0.4.9",
     "humps": "^2.0.1",
     "lodash": "^4.17.15",
     "moment": "^2.26.0",
     "pluralize": "^8.0.0",
-    "react-apollo": "^3.1.5",
     "yup": "^0.29.1"
   }
 }
