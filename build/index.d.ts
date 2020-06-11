@@ -52,7 +52,7 @@ interface Props {
     sortVariable?: string;
     initialSort?: string;
     multiselect?: boolean;
-    onSuccess?: (result?: string) => void;
+    onSuccess?: (result: string) => void;
     onWarning?: () => void;
     onError?(message: string): void;
     onInfo?: () => void;
