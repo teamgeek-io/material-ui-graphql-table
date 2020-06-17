@@ -2661,10 +2661,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-formik-material-ui-elements@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/formik-material-ui-elements/-/formik-material-ui-elements-1.0.6.tgz#8fa11636d8e804a40332c55d1c3e731ec17adb96"
-  integrity sha512-z4l4+authFK/tt6GlQ9r4VdX7S7c92SkEyk9rboQlXFeI1DRW38oRhof56ZqHiVEauMy7mxMtyo6V8w/1ZZGpA==
+formik-material-ui-elements@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/formik-material-ui-elements/-/formik-material-ui-elements-1.0.7.tgz#99fce00938b34b31dbd903c8ad0d6e7eb27d0673"
+  integrity sha512-LKeeKHGUSwbFeA54VC66LQg9c6y3RC2UXZEyCSqwDAtLtoII5ZW+O6rSNgl+gc3oolhCjgU57hr86vUAYRjaEA==
   dependencies:
     "@types/lodash" "^4.14.155"
     downshift "^5.4.2"

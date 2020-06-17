@@ -30597,7 +30597,6 @@ var formatValue = function (field, value) {
     if (field.type === "autocomplete") {
         if (field.options) {
             var labelPath = lodash.get(field.options, "labelPath", "name");
-            console.log(value, labelPath);
             return lodash.get(value, labelPath, "");
         }
     }
