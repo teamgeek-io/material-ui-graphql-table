@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import _ from "lodash"
 import React from "react"
+import type { ReactNode } from "react"
 
 import Button from "@material-ui/core/Button"
 import Checkbox from "@material-ui/core/Checkbox"
@@ -15,11 +16,20 @@ import ViewIcon from "@material-ui/icons/Visibility"
 
 import { formatValue } from "./utils"
 import type { Action, Field } from "."
+import { Chip } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
   deleting: {
     color: theme.palette.action.disabled,
     textDecoration: "line-through",
+  },
+  list: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    "& > *": {
+      margin: theme.spacing(0.5),
+    },
   },
 }))
 
@@ -67,17 +77,35 @@ const TableRow: React.FC<Props> = ({
     return formatValue(field, value)
   }
 
+  const renderContent = (field: Field): ReactNode => {
+    if (field.type === "autocompletelist" && field.options) {
+      const labelPath = _.get(field.options, "labelPath")
+      const value = _.get(data, field.name)
+      return (
+        <div className={classes.list}>
+          {value.edges.map(({ node }: { node: any }) => (
+            <Chip key={node.id} label={_.get(node, labelPath)} />
+          ))}
+        </div>
+      )
+    } else {
+      return (
+        <Typography
+          className={clsx(deleting && classes.deleting)}
+          variant="body2"
+        >
+          {renderValue(field)}
+        </Typography>
+      )
+    }
+  }
+
   const renderFields = (): React.ReactNode => {
     return fields.map(
       (field) =>
         !field.hidden && (
           <TableCell key={`${data.id}-${field.name}`}>
-            <Typography
-              className={clsx(deleting && classes.deleting)}
-              variant="body2"
-            >
-              {renderValue(field)}
-            </Typography>
+            {renderContent(field)}
           </TableCell>
         ),
     )

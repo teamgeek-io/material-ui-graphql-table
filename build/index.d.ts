@@ -1,6 +1,6 @@
 import React from "react";
 import type { ElementType, ReactNode } from "react";
-import { DocumentNode } from "apollo-boost";
+import type { DocumentNode } from "apollo-boost";
 interface GenericDictionary {
     [key: string]: any;
 }
@@ -13,16 +13,17 @@ interface Option {
     label: string;
     value: any;
 }
+declare type FieldType = "autocomplete" | "datetime" | "select" | "switch" | "editor" | "autocompletelist";
 export interface AutocompleteProps {
     connectionName: string;
     labelPath?: string;
-    query: string;
+    query: DocumentNode;
     valuePath?: string;
     saveArg?: string;
 }
 export interface Field {
     name: string;
-    type?: "autocomplete" | "datetime" | "select" | "switch" | "editor";
+    type?: FieldType;
     schema?: {
         [key: string]: any;
     };

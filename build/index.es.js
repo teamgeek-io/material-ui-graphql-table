@@ -17,7 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Formik, Field } from 'formik';
 import MuiTextField from '@material-ui/core/TextField';
-import { Form, DialogTitle as DialogTitle$1, AutocompleteField, SelectField, SwitchField, RichTextField, TextField, DialogActions as DialogActions$1 } from 'formik-material-ui-elements';
+import { Form, DialogTitle as DialogTitle$1, DialogActions as DialogActions$1, AutocompleteField, SelectField, SwitchField, RichTextField, AutocompleteListField, TextField } from 'formik-material-ui-elements';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Table from '@material-ui/core/Table';
@@ -31,6 +31,7 @@ import SortDescIcon from '@material-ui/icons/ArrowDropUp';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import ViewIcon from '@material-ui/icons/Visibility';
+import { Chip } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -30657,9 +30658,17 @@ var FormDialog = function (_a) {
             var field = lodash.find(fields, { name: key });
             if (!field)
                 return;
-            if (field.type === "autocomplete") {
+            if (field.type === "autocompletelist") {
                 var completeOptions = field.options;
-                var _b = completeOptions.saveArg, saveArg = _b === void 0 ? field.name : _b, _c = completeOptions.valuePath, valuePath = _c === void 0 ? "id" : _c;
+                var _b = completeOptions.saveArg, saveArg = _b === void 0 ? field.name : _b, _c = completeOptions.valuePath, valuePath_1 = _c === void 0 ? "id" : _c;
+                transformedValues[saveArg] = lodash.get(value, "edges", []).map(function (_a) {
+                    var node = _a.node;
+                    return lodash.get(node, valuePath_1);
+                });
+            }
+            else if (field.type === "autocomplete") {
+                var completeOptions = field.options;
+                var _d = completeOptions.saveArg, saveArg = _d === void 0 ? field.name : _d, _e = completeOptions.valuePath, valuePath = _e === void 0 ? "id" : _e;
                 transformedValues[saveArg] = lodash.get(value, valuePath);
             }
             else if (field.type === "editor") {
@@ -30704,42 +30713,57 @@ var FormDialog = function (_a) {
             });
         });
     };
-    var renderFields = function () {
-        return fields.map(function (field, index) {
-            var required = Boolean(field.schema &&
-                lodash.find(field.schema.tests, { OPTIONS: { name: "required" } }));
-            if (field.readonly) {
-                if (adding)
+    var renderField = function (field, index) {
+        var required = Boolean(field.schema &&
+            lodash.find(field.schema.tests, { OPTIONS: { name: "required" } }));
+        if (field.readonly) {
+            if (adding)
+                return null;
+            var value = formatValue(field, lodash.get(data, field.name));
+            return (React.createElement(MuiTextField, { key: field.name, id: field.name, name: field.name, label: field.label, value: value, fullWidth: true, variant: "outlined", margin: "normal", disabled: true, multiline: field.multiline }));
+        }
+        else {
+            if (field.type === "autocomplete") {
+                if (!field.options) {
+                    console.error("Missing options for field: " + field.name);
                     return null;
-                var value = formatValue(field, lodash.get(data, field.name));
-                return (React.createElement(MuiTextField, { key: field.name, id: field.name, name: field.name, label: field.label, value: value, fullWidth: true, variant: "outlined", margin: "normal", disabled: true, multiline: field.multiline }));
+                }
+                if (Array.isArray(field.options)) {
+                    console.error("options must be an object for autocomplete field: " + field.name);
+                    return null;
+                }
+                var _a = field.options, connectionName = _a.connectionName, labelPath = _a.labelPath, query = _a.query, valuePath = _a.valuePath;
+                return (React.createElement(Field, { key: field.name, component: AutocompleteField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, connectionName: connectionName, labelPath: labelPath, query: query, valuePath: valuePath }));
+            }
+            else if (field.type === "select") {
+                return (React.createElement(Field, { key: field.name, component: SelectField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, options: field.options }));
+            }
+            else if (field.type === "switch") {
+                return (React.createElement(Field, { key: field.name, component: SwitchField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, options: field.options }));
+            }
+            else if (field.type === "editor") {
+                return (React.createElement(Field, { key: field.name, component: RichTextField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, multiline: field.multiline }));
+            }
+            else if (field.type === "autocompletelist") {
+                if (!field.options) {
+                    console.error("Missing options for field: " + field.name);
+                    return null;
+                }
+                if (Array.isArray(field.options)) {
+                    console.error("options must be an object for autocomplete field: " + field.name);
+                    return null;
+                }
+                var _b = field.options, connectionName = _b.connectionName, labelPath = _b.labelPath, query = _b.query, valuePath = _b.valuePath;
+                return (React.createElement(Field, { key: field.name, component: AutocompleteListField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, connectionName: connectionName, labelPath: labelPath, query: query, valuePath: valuePath }));
             }
             else {
-                if (field.type === "autocomplete") {
-                    if (!field.options) {
-                        console.error("Missing options for field: " + field.name);
-                        return null;
-                    }
-                    if (Array.isArray(field.options)) {
-                        console.error("options must be an object for autocomplete field: " + field.name);
-                        return null;
-                    }
-                    var _a = field.options, connectionName = _a.connectionName, labelPath = _a.labelPath, query = _a.query, valuePath = _a.valuePath;
-                    return (React.createElement(Field, { key: field.name, component: AutocompleteField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, connectionName: connectionName, labelPath: labelPath, query: query, valuePath: valuePath }));
-                }
-                else if (field.type === "select") {
-                    return (React.createElement(Field, { key: field.name, component: SelectField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, options: field.options }));
-                }
-                else if (field.type === "switch") {
-                    return (React.createElement(Field, { key: field.name, component: SwitchField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, options: field.options }));
-                }
-                else if (field.type === "editor") {
-                    return (React.createElement(Field, { key: field.name, component: RichTextField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, multiline: field.multiline }));
-                }
-                else {
-                    return (React.createElement(Field, { key: field.name, component: TextField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, multiline: field.multiline }));
-                }
+                return (React.createElement(Field, { key: field.name, component: TextField, id: field.name, name: field.name, label: field.label, autoFocus: index === 0, required: required, disabled: readonly, multiline: field.multiline }));
             }
+        }
+    };
+    var renderFields = function () {
+        return fields.map(function (field, index) {
+            return renderField(field, index);
         });
     };
     return (React.createElement(Dialog, { open: open, "aria-labelledby": "form-dialog-title", onClose: onClose },
@@ -31007,6 +31031,14 @@ var useStyles$2 = makeStyles(function (theme) { return ({
         color: theme.palette.action.disabled,
         textDecoration: "line-through",
     },
+    list: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        "& > *": {
+            margin: theme.spacing(0.5),
+        },
+    },
 }); });
 var TableRow = function (_a) {
     var data = _a.data, fields = _a.fields, selected = _a.selected, onSelect = _a.onSelect, onEdit = _a.onEdit, editable = _a.editable, deleting = _a.deleting, actions = _a.actions;
@@ -31025,10 +31057,22 @@ var TableRow = function (_a) {
         var value = lodash.get(data, field.name);
         return formatValue(field, value);
     };
+    var renderContent = function (field) {
+        if (field.type === "autocompletelist" && field.options) {
+            var labelPath_1 = lodash.get(field.options, "labelPath");
+            var value = lodash.get(data, field.name);
+            return (React.createElement("div", { className: classes.list }, value.edges.map(function (_a) {
+                var node = _a.node;
+                return (React.createElement(Chip, { key: node.id, label: lodash.get(node, labelPath_1) }));
+            })));
+        }
+        else {
+            return (React.createElement(Typography, { className: clsx(deleting && classes.deleting), variant: "body2" }, renderValue(field)));
+        }
+    };
     var renderFields = function () {
         return fields.map(function (field) {
-            return !field.hidden && (React.createElement(TableCell, { key: data.id + "-" + field.name },
-                React.createElement(Typography, { className: clsx(deleting && classes.deleting), variant: "body2" }, renderValue(field))));
+            return !field.hidden && (React.createElement(TableCell, { key: data.id + "-" + field.name }, renderContent(field)));
         });
     };
     var renderButton = function (_a) {

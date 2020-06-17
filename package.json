@@ -1,11 +1,12 @@
 {
   "name": "material-ui-graphql-table",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "GraphQL powered table to drive CRUD operations",
   "author": "Teamgeek",
   "license": "MIT",
   "private": false,
   "devDependencies": {
+    "@apollo/react-hooks": "^3.1.5",
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.9.14",
@@ -15,6 +16,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "^3.1.0",
     "@typescript-eslint/parser": "^3.1.0",
+    "apollo-boost": "^0.4.9",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.1.0",
     "eslint": "^6.8.0",
@@ -24,12 +26,13 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "formik": "^2.1.4",
-    "formik-material-ui-elements": "^1.0.0",
+    "formik-material-ui-elements": "^1.0.7",
     "husky": "^4.2.3",
     "jest": "^26.0.1",
     "lint-staged": "^10.1.1",
     "prettier": "^2.0.2",
     "react": "^16.13.1",
+    "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",
     "rollup": "^2.15.0",
@@ -37,26 +40,27 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
     "rollup-plugin-typescript2": "^0.27.1",
+    "rollup-watch": "^4.3.1",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5",
-    "@apollo/react-hooks": "^3.1.5",
-    "apollo-boost": "^0.4.9",
-    "react-apollo": "^3.1.5"
+    "graphql": "^14.3.1"
   },
   "peerDependencies": {
+    "@apollo/react-hooks": "^3.1.5",
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.9.14",
-    "formik": "^2.1.4",
-    "formik-material-ui-elements": "^1.0.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "@apollo/react-hooks": "^3.1.5",
     "apollo-boost": "^0.4.9",
-    "react-apollo": "^3.1.5"
+    "formik": "^2.1.4",
+    "formik-material-ui-elements": "^1.0.7",
+    "react": "^16.13.1",
+    "react-apollo": "^3.1.5",
+    "react-dom": "^16.13.1",
+    "graphql": "^14.3.1"
   },
   "scripts": {
     "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "jest"
   },
   "husky": {
