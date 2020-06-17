@@ -18,6 +18,7 @@ import {
   TextField,
   DialogActions,
   DialogTitle,
+  AutocompleteListField,
   Form,
 } from "formik-material-ui-elements"
 
@@ -80,7 +81,15 @@ const FormDialog: React.FC<Props> = ({
     Object.entries(values).forEach(([key, value]) => {
       const field = _.find(fields, { name: key })
       if (!field) return
-      if (field.type === "autocomplete") {
+      if (field.type === "autocompletelist") {
+        const completeOptions = field.options as AutocompleteProps
+        const { saveArg = field.name, valuePath = "id" } = completeOptions
+        transformedValues[saveArg] = _.get(
+          value,
+          "edges",
+          [],
+        ).map(({ node }: { node: any }) => _.get(node, valuePath))
+      } else if (field.type === "autocomplete") {
         const completeOptions = field.options as AutocompleteProps
         const { saveArg = field.name, valuePath = "id" } = completeOptions
         transformedValues[saveArg] = _.get(value, valuePath)
@@ -119,119 +128,153 @@ const FormDialog: React.FC<Props> = ({
     setSubmitting(false)
   }
 
-  const renderFields = (): React.ReactNode => {
-    return fields.map((field, index) => {
-      const required = Boolean(
-        field.schema &&
-          _.find(field.schema.tests, { OPTIONS: { name: "required" } }),
-      )
-      if (field.readonly) {
-        if (adding) return null
+  const renderField = (field: FieldType, index: number): React.ReactNode => {
+    const required = Boolean(
+      field.schema &&
+        _.find(field.schema.tests, { OPTIONS: { name: "required" } }),
+    )
+    if (field.readonly) {
+      if (adding) return null
 
-        const value = formatValue(field, _.get(data, field.name))
+      const value = formatValue(field, _.get(data, field.name))
+      return (
+        <MuiTextField
+          key={field.name}
+          id={field.name}
+          name={field.name}
+          label={field.label}
+          value={value}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          disabled
+          multiline={field.multiline}
+        />
+      )
+    } else {
+      if (field.type === "autocomplete") {
+        if (!field.options) {
+          console.error(`Missing options for field: ${field.name}`)
+          return null
+        }
+
+        if (Array.isArray(field.options)) {
+          console.error(
+            `options must be an object for autocomplete field: ${field.name}`,
+          )
+          return null
+        }
+
+        const { connectionName, labelPath, query, valuePath } = field.options
         return (
-          <MuiTextField
+          <Field
             key={field.name}
+            component={AutocompleteField}
             id={field.name}
             name={field.name}
             label={field.label}
-            value={value}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            disabled
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
+            connectionName={connectionName}
+            labelPath={labelPath}
+            query={query}
+            valuePath={valuePath}
+          />
+        )
+      } else if (field.type === "select") {
+        return (
+          <Field
+            key={field.name}
+            component={SelectField}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
+            options={field.options}
+          />
+        )
+      } else if (field.type === "switch") {
+        return (
+          <Field
+            key={field.name}
+            component={SwitchField}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
+            options={field.options}
+          />
+        )
+      } else if (field.type === "editor") {
+        return (
+          <Field
+            key={field.name}
+            component={RichTextField}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
             multiline={field.multiline}
           />
         )
-      } else {
-        if (field.type === "autocomplete") {
-          if (!field.options) {
-            console.error(`Missing options for field: ${field.name}`)
-            return null
-          }
-
-          if (Array.isArray(field.options)) {
-            console.error(
-              `options must be an object for autocomplete field: ${field.name}`,
-            )
-            return null
-          }
-
-          const { connectionName, labelPath, query, valuePath } = field.options
-          return (
-            <Field
-              key={field.name}
-              component={AutocompleteField}
-              id={field.name}
-              name={field.name}
-              label={field.label}
-              autoFocus={index === 0}
-              required={required}
-              disabled={readonly}
-              connectionName={connectionName}
-              labelPath={labelPath}
-              query={query}
-              valuePath={valuePath}
-            />
-          )
-        } else if (field.type === "select") {
-          return (
-            <Field
-              key={field.name}
-              component={SelectField}
-              id={field.name}
-              name={field.name}
-              label={field.label}
-              autoFocus={index === 0}
-              required={required}
-              disabled={readonly}
-              options={field.options}
-            />
-          )
-        } else if (field.type === "switch") {
-          return (
-            <Field
-              key={field.name}
-              component={SwitchField}
-              id={field.name}
-              name={field.name}
-              label={field.label}
-              autoFocus={index === 0}
-              required={required}
-              disabled={readonly}
-              options={field.options}
-            />
-          )
-        } else if (field.type === "editor") {
-          return (
-            <Field
-              key={field.name}
-              component={RichTextField}
-              id={field.name}
-              name={field.name}
-              label={field.label}
-              autoFocus={index === 0}
-              required={required}
-              disabled={readonly}
-              multiline={field.multiline}
-            />
-          )
-        } else {
-          return (
-            <Field
-              key={field.name}
-              component={TextField}
-              id={field.name}
-              name={field.name}
-              label={field.label}
-              autoFocus={index === 0}
-              required={required}
-              disabled={readonly}
-              multiline={field.multiline}
-            />
-          )
+      } else if (field.type === "autocompletelist") {
+        if (!field.options) {
+          console.error(`Missing options for field: ${field.name}`)
+          return null
         }
+
+        if (Array.isArray(field.options)) {
+          console.error(
+            `options must be an object for autocomplete field: ${field.name}`,
+          )
+          return null
+        }
+
+        const { connectionName, labelPath, query, valuePath } = field.options
+        return (
+          <Field
+            key={field.name}
+            component={AutocompleteListField}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
+            connectionName={connectionName}
+            labelPath={labelPath}
+            query={query}
+            valuePath={valuePath}
+          />
+        )
+      } else {
+        return (
+          <Field
+            key={field.name}
+            component={TextField}
+            id={field.name}
+            name={field.name}
+            label={field.label}
+            autoFocus={index === 0}
+            required={required}
+            disabled={readonly}
+            multiline={field.multiline}
+          />
+        )
       }
+    }
+  }
+
+  const renderFields = (): React.ReactNode => {
+    return fields.map((field, index) => {
+      return renderField(field, index)
     })
   }
 

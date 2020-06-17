@@ -15,7 +15,7 @@ import Fab from "./Fab"
 import FormDialog from "./FormDialog"
 import ResultTable from "./ResultTable"
 import SearchField from "./SearchField"
-import { DocumentNode } from "apollo-boost"
+import type { DocumentNode } from "apollo-boost"
 
 const noop = (...args: any[]): any => {
   console.warn(...args)
@@ -51,17 +51,25 @@ interface Option {
   value: any
 }
 
+type FieldType =
+  | "autocomplete"
+  | "datetime"
+  | "select"
+  | "switch"
+  | "editor"
+  | "autocompletelist"
+
 export interface AutocompleteProps {
   connectionName: string
   labelPath?: string
-  query: string
+  query: DocumentNode
   valuePath?: string
   saveArg?: string
 }
 
 export interface Field {
   name: string
-  type?: "autocomplete" | "datetime" | "select" | "switch" | "editor"
+  type?: FieldType
   schema?: {
     [key: string]: any
   }
