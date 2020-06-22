@@ -1,6 +1,6 @@
 {
   "name": "material-ui-graphql-table",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "GraphQL powered table to drive CRUD operations",
   "author": "Teamgeek",
   "license": "MIT",
