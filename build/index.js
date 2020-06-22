@@ -31099,11 +31099,11 @@ var TableRow = function (_a) {
         }
         if (iconEl) {
             return (React__default.createElement(Tooltip, { title: title, "aria-label": title },
-                React__default.createElement(IconButton, { color: "primary", onClick: function () { return onAction(); }, disabled: isDisabled }, iconEl)));
+                React__default.createElement(IconButton, { color: "primary", onClick: function () { return onAction(data); }, disabled: isDisabled }, iconEl)));
         }
         else {
             return (React__default.createElement(Tooltip, { title: title, "aria-label": title },
-                React__default.createElement(Button, { color: "primary", onClick: function () { return onAction(); }, disabled: isDisabled }, title)));
+                React__default.createElement(Button, { color: "primary", onClick: function () { return onAction(data); }, disabled: isDisabled }, title)));
         }
     };
     var renderActions = function () {

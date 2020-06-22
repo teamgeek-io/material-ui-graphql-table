@@ -6,7 +6,7 @@ interface GenericDictionary {
 }
 export interface Action {
     title: string;
-    onAction: () => void;
+    onAction: (data: any) => void;
     icon: ElementType | ReactNode | (() => void);
 }
 interface Option {

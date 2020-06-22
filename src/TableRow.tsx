@@ -136,7 +136,7 @@ const TableRow: React.FC<Props> = ({
         <Tooltip title={title} aria-label={title}>
           <IconButton
             color="primary"
-            onClick={(): void => onAction()}
+            onClick={(): void => onAction(data)}
             disabled={isDisabled}
           >
             {iconEl}
@@ -148,7 +148,7 @@ const TableRow: React.FC<Props> = ({
         <Tooltip title={title} aria-label={title}>
           <Button
             color="primary"
-            onClick={(): void => onAction()}
+            onClick={(): void => onAction(data)}
             disabled={isDisabled}
           >
             {title}
