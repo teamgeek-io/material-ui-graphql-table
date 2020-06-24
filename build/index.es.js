@@ -30594,10 +30594,10 @@ var formatValue = function (field, value) {
         }
     }
     if (field.type === "select") {
-        var value_1 = lodash.find(field.options, function (option) {
-            return option["value"] && option["value"] === value_1;
+        var option = lodash.find(field.options, function (option) {
+            return option["value"] && option["value"] === value;
         });
-        return value_1 === null || value_1 === void 0 ? void 0 : value_1.label;
+        option === null || option === void 0 ? void 0 : option.label;
     }
     if (field.type === "switch") {
         return value ? "Yes" : "No";
@@ -31065,6 +31065,10 @@ var TableRow = function (_a) {
                 var node = _a.node;
                 return (React.createElement(Chip, { key: node.id, label: lodash.get(node, labelPath_1) }));
             })));
+        }
+        if (field.type === "editor") {
+            var value = lodash.get(data, field.name);
+            return React.createElement("div", { dangerouslySetInnerHTML: { __html: value } });
         }
         else {
             return (React.createElement(Typography, { className: clsx(deleting && classes.deleting), variant: "body2" }, renderValue(field)));

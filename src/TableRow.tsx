@@ -88,6 +88,10 @@ const TableRow: React.FC<Props> = ({
           ))}
         </div>
       )
+    }
+    if (field.type === "editor") {
+      const value = _.get(data, field.name)
+      return <div dangerouslySetInnerHTML={{ __html: value }} />
     } else {
       return (
         <Typography
