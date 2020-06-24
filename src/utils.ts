@@ -17,10 +17,10 @@ export const formatValue = (field: Field, value: any): string => {
   }
 
   if (field.type === "select") {
-    const value: any = _.find(field.options, (option) => {
+    const option: any = _.find(field.options, (option) => {
       return option["value"] && option["value"] === value
     })
-    return value?.label
+    option?.label
   }
 
   if (field.type === "switch") {
